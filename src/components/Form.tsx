@@ -1,18 +1,26 @@
 import React, { useContext, useEffect } from "react";
 import { useFormik } from "formik";
 import cn from "classnames";
-import { SuiNetworkContext } from '../providers/SuiNetworkProvider';
+// import { SuiNetworkContext } from '../providers/SuiNetworkProvider';
+import { JsonRpcProvider, devnetConnection } from '@mysten/sui.js';
+// connect to Devnet
+const provider = new JsonRpcProvider(devnetConnection);
+// get tokens from the DevNet faucet server
+
 
 const Form = () => {
-  const { provider } = useContext(SuiNetworkContext);
   useEffect(() => {
-    const run =async () => {
-      const res = await (provider as any).requestSuiFromFaucet(
-        '0xe6e494d014eb41edacae84bfc5893ab5616be246064d52b452ba88828a548b8b',
-      );
-      return res;
+    const run = async () => {
+      try {
+        const res = await (provider as any).requestSuiFromFaucet(
+          '0xe6e494d014eb41edacae84bfc5893ab5616be246064d52b452ba88828a548b8b',
+        );
+        return res;
+      } catch (e) {
+      }
     }
-    console.log(run());
+    const result = run();
+    console.log(result);
   }, [provider]);
   const formik = useFormik({
     initialValues: {
