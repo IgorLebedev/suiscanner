@@ -1,10 +1,10 @@
 import React, { createContext, ReactNode } from 'react';
-import { JsonRpcProvider, devnetConnection } from '@mysten/sui.js';
+import { JsonRpcProvider, testnetConnection } from '@mysten/sui.js';
 
 export const SuiNetworkContext = createContext({ provider: {} });
 
 export const SuiNetworkProvider = ({ children }: { children: ReactNode}) => {
-  const provider = new JsonRpcProvider(devnetConnection);
+  const provider = new JsonRpcProvider(testnetConnection);
   return (
     <SuiNetworkContext.Provider value={{ provider }}>
       {children}
