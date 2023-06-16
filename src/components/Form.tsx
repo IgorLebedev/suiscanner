@@ -1,14 +1,10 @@
 import React, { useContext, useEffect } from "react";
 import { useFormik } from "formik";
 import cn from "classnames";
-// import { SuiNetworkContext } from '../providers/SuiNetworkProvider';
-import { JsonRpcProvider, devnetConnection } from '@mysten/sui.js';
-// connect to Devnet
-const provider = new JsonRpcProvider(devnetConnection);
-// get tokens from the DevNet faucet server
-
+import { SuiNetworkContext } from '../providers/SuiNetworkProvider';
 
 const Form = () => {
+  const { provider } = useContext(SuiNetworkContext);
   useEffect(() => {
     const run = async () => {
       try {
@@ -17,6 +13,7 @@ const Form = () => {
         );
         return res;
       } catch (e) {
+        throw e;
       }
     }
     const result = run();
