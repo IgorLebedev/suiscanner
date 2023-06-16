@@ -4,16 +4,16 @@ import cn from "classnames";
 import { SuiNetworkContext } from '../providers/SuiNetworkProvider';
 
 const Form = () => {
-  const dick = useContext(SuiNetworkContext);
+  const { provider } = useContext(SuiNetworkContext);
   useEffect(() => {
     const run =async () => {
-      const res = await (dick as any).requestSuiFromFaucet(
+      const res = await (provider as any).requestSuiFromFaucet(
         '0xe6e494d014eb41edacae84bfc5893ab5616be246064d52b452ba88828a548b8b',
       );
       return res;
     }
     console.log(run());
-  }, [dick]);
+  }, [provider]);
   const formik = useFormik({
     initialValues: {
       wallet: '',
