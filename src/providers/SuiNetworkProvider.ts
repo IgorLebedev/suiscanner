@@ -1,3 +1,3 @@
-import { JsonRpcProvider, testnetConnection } from '@mysten/sui.js';
+import { JsonRpcProvider, mainnetConnection} from '@mysten/sui.js';
 
-export const suiNetworkProvider = new JsonRpcProvider(testnetConnection);
+export const suiNetworkProvider = new JsonRpcProvider(mainnetConnection);
