@@ -1,6 +1,14 @@
 import { suiNetworkProvider } from "../providers/SuiNetworkProvider";
 
-const fetchPic = (objectId: string | undefined) => {
+const fixIpfs = (imgs: Array<string | null | undefined>): Array<string | null | undefined> => imgs.map((img) => {
+  if (img?.startsWith('ipfs')) {
+    const link = img?.split('//').slice(-1);
+    return `https://ipfs.io/ipfs/${link}`;
+  }
+  return img;
+});
+
+const parsePic = (objectId: string | undefined) => {
   if (objectId !== undefined) {
     const pic = suiNetworkProvider.getObject({
       id: objectId,
@@ -18,7 +26,7 @@ const fetchSuiObjs = async (wallet: string) => {
   const allObjects =  await suiNetworkProvider.getOwnedObjects({
     owner: wallet,
   });
-  const picturesPromise =  allObjects.data.map(({ data }) => fetchPic(data?.objectId));
+  const picturesPromise =  allObjects.data.map(({ data }) => parsePic(data?.objectId));
   const picturesRes = await Promise.all(picturesPromise);
   const onlyPics = picturesRes
     .filter((object) => {
@@ -26,13 +34,15 @@ const fetchSuiObjs = async (wallet: string) => {
     return allData?.display?.data !== null && allData?.display?.data?.hasOwnProperty('image_url');
   })
     .map((object) => {
+  console.log(object)
     const nftData = object?.data?.display;
     if (typeof nftData?.data === 'string' || typeof nftData?.data !== 'object' ) {
       return null;
     }
     return nftData?.data?.image_url;
   });
-  return onlyPics;
+  const fixed = fixIpfs(onlyPics);
+  return fixed;
 };
 
 export default fetchSuiObjs
