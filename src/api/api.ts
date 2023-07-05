@@ -34,7 +34,6 @@ const fetchSuiObjs = async (wallet: string) => {
     return allData?.display?.data !== null && allData?.display?.data?.hasOwnProperty('image_url');
   })
     .map((object) => {
-  console.log(object)
     const nftData = object?.data?.display;
     if (typeof nftData?.data === 'string' || typeof nftData?.data !== 'object' ) {
       return null;
