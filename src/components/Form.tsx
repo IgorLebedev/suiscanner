@@ -2,8 +2,14 @@ import React, { useEffect, useRef } from "react";
 import { useFormik } from "formik";
 import cn from "classnames";
 import fetchSuiObjs from "../api/api";
+import { useAppDispatch } from '../hooks/hooks'
+import { addPics } from "../slicers/picsSlice";
+import { useNavigate } from "react-router-dom";
+import Spinner from "./Spinner";
 
 const Form = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const input: any = useRef(null);
   useEffect(() => {
     if (input.current !== null) {
@@ -12,12 +18,13 @@ const Form = () => {
   }, []);
   const formik = useFormik({
     initialValues: {
-      wallet: '0xe6e494d014eb41edacae84bfc5893ab5616be246064d52b452ba88828a548b8b',
+      wallet: '',
     },
     onSubmit: async ({ wallet }) => {
       try {
         const result = await fetchSuiObjs(wallet);
-        console.log(result);
+        dispatch(addPics(result));
+        navigate('/showcase')
       } catch (e) {
         throw e;
       }
@@ -34,24 +41,24 @@ const Form = () => {
               id="wallet"
               value={formik.values.wallet}
               placeholder="Wallet"
-              aria-label="Full name"
+              aria-label="wallet"
               onChange={formik.handleChange}
             />
           </div>
           <div className="flex justify-end py-2">
           <button
-            className={cn("flex-shrink-0", "text-sm", "text-white", "py-1", "px-4", "rounded", {
-              "bg-gray-600": formik.values.wallet === '', 
-              "hover:bg-teal-700": formik.values.wallet !== '',
-              "bg-teal-500": formik.values.wallet !== '',
+            className={cn("flex-shrink-0", "text-sm", "text-white", "py-1", "px-4", "rounded-lg", {
+              "hover:bg-teal-700": formik.values.wallet !== '' || !formik.isSubmitting,
+              "bg-teal-500": formik.values.wallet !== '' || !formik.isSubmitting,
+              "opacity-50": formik.values.wallet === '' || formik.isSubmitting,
             })}
             type="submit"
-            disabled={formik.values.wallet === ''}
+            disabled={formik.values.wallet === '' || formik.isSubmitting}
           >
-            Get
+            {formik.isSubmitting ? <Spinner /> : 'Get'}
           </button>
           <button
-            className="flex-shrink-0 border-transparent border-4 text-teal-500 hover:text-teal-800 text-sm py-1 px-2 rounded"
+            className="flex-shrink-0 border-transparent border-4 text-teal-500 hover:text-teal-800 text-sm py-1 px-2"
             type="button"
             onClick={() => formik.resetForm()}
           >
