@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../hooks/hooks";
 import { clearPics } from "../slicers/picsSlice";
 import Card from "./NftCard";
+const uniqueId = require('lodash.uniqueid');
 
 const ShowCase = () => {
   const dispatch = useAppDispatch();
@@ -25,7 +26,7 @@ const ShowCase = () => {
         </button>
       </div> 
       {pics.map((link) => (
-        <Card link={link}/>
+        <Card key={uniqueId()} link={link}/>
       ))}
     </div>
   )
