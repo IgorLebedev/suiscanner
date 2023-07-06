@@ -26,7 +26,7 @@ const fetchSuiObjs = async (wallet: string) => {
   const allObjects =  await suiNetworkProvider.getOwnedObjects({
     owner: wallet,
   });
-  const picturesPromise =  allObjects.data.map(({ data } : { data: any }) => parsePic(data?.objectId));
+  const picturesPromise =  allObjects.data.map(({ data } : any) => parsePic(data?.objectId));
   const picturesRes = await Promise.all(picturesPromise);
   const onlyPics = picturesRes
     .filter((object: any) => {
