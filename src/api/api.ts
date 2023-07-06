@@ -26,14 +26,14 @@ const fetchSuiObjs = async (wallet: string) => {
   const allObjects =  await suiNetworkProvider.getOwnedObjects({
     owner: wallet,
   });
-  const picturesPromise =  allObjects.data.map(({ data }) => parsePic(data?.objectId));
+  const picturesPromise =  allObjects.data.map(({ data } : { data: any }) => parsePic(data?.objectId));
   const picturesRes = await Promise.all(picturesPromise);
   const onlyPics = picturesRes
-    .filter((object) => {
+    .filter((object: any) => {
     const allData = object?.data;
     return allData?.display?.data !== null && allData?.display?.data?.hasOwnProperty('image_url');
   })
-    .map((object) => {
+    .map((object: any) => {
     const nftData = object?.data?.display;
     if (typeof nftData?.data === 'string' || typeof nftData?.data !== 'object' ) {
       return null;
